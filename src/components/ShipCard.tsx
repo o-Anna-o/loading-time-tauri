@@ -1,3 +1,4 @@
+// src/components/ShipCard.tsx
 
 import { Link, useNavigate } from 'react-router-dom'
 import { addShipToRequest } from '../api'

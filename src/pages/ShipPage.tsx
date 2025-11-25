@@ -13,12 +13,9 @@ export default function ShipPage() {
 
   // buildImgSrc теперь использует просто public/img/ и fallback default.png
 const buildImgSrc = (p?: string | null) => {
-  if (!p) return '/default.png'
-
-    if (/^https?:\/\//i.test(p)) return p // внешний URL
-
-    // локальные mock картинки лежат в public/img/
-    return `/img/${p}`
+    if (!p) return '/default.png'
+    try { new URL(p); return p }
+    catch (e) { return 'http://localhost:9000/loading-time-img/img/' + p }
   }
 
   useEffect(() => {
