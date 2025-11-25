@@ -1,17 +1,26 @@
-// src/pages/ShipPage.tsx
-
-import { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getShips } from '../api'
 import ShipListIcon from '../components/ShipListIcon'
 import Breadcrumbs from '../components/Breadcrumbs'
 import mock from '../mock'
 import '../resources/ShipDetail.css'
+import defaultImg from '../resources/img/default.png'
 
 export default function ShipPage() {
   const { id } = useParams()
   const [ship, setShip] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+
+  // buildImgSrc теперь использует просто public/img/ и fallback default.png
+const buildImgSrc = (p?: string | null) => {
+  if (!p) return defaultImg
+
+    if (/^https?:\/\//i.test(p)) return p // внешний URL
+
+    // локальные mock картинки лежат в public/img/
+    return `/img/${p}`
+  }
 
   useEffect(() => {
     if (!id) return
@@ -49,7 +58,7 @@ export default function ShipPage() {
   if (!ship) return <div className="loading">Корабль не найден</div>
 
   const photo = ship.photo_url ?? ship.PhotoURL ?? ship.photo ?? ship.Photo
-  const src = photo ? `http://localhost:9000/loading-time-img/img/${photo}` : ''
+  const src = buildImgSrc(photo)
 
   const name = ship.name ?? ship.Name ?? 'Без названия'
   const capacity = ship.capacity ?? ship.Capacity ?? ''
@@ -68,15 +77,13 @@ export default function ShipPage() {
         <div className="ship-detail-card">
           <h1 className="ship-detail-title">{name}</h1>
 
-          {src && (
-            <div className="ship-detail-image">
-              <img
-                src={src}
-                alt={name}
-                onError={(e: any) => { e.target.style.display = 'none' }}
-              />
-            </div>
-          )}
+          <div className="ship-detail-image">
+            <img
+              src={src}
+              alt={name}
+              onError={(e: any) => { e.target.src = defaultImg }}
+            />
+          </div>
 
           <div className="ship-detail-text">
             <p><b>Вместимость:</b> {capacity} TEU</p>
