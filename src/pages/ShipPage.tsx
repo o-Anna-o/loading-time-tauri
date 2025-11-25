@@ -5,7 +5,6 @@ import ShipListIcon from '../components/ShipListIcon'
 import Breadcrumbs from '../components/Breadcrumbs'
 import mock from '../mock'
 import '../resources/ShipDetail.css'
-import defaultImg from '../resources/img/default.png'
 
 export default function ShipPage() {
   const { id } = useParams()
@@ -14,7 +13,7 @@ export default function ShipPage() {
 
   // buildImgSrc теперь использует просто public/img/ и fallback default.png
 const buildImgSrc = (p?: string | null) => {
-  if (!p) return defaultImg
+  if (!p) return '/default.png'
 
     if (/^https?:\/\//i.test(p)) return p // внешний URL
 
@@ -81,7 +80,7 @@ const buildImgSrc = (p?: string | null) => {
             <img
               src={src}
               alt={name}
-              onError={(e: any) => { e.target.src = defaultImg }}
+              onError={(e: any) => { e.target.src = '/default.png'  }}
             />
           </div>
 
